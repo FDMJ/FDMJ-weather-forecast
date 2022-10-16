@@ -1,21 +1,18 @@
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) throws Exception{
+        System.out.println("Für welche Stadt soll das Wetter abgefragt werden?");
+        Scanner input = new Scanner(System.in);
+        String city = input.next();
+        System.out.println("Das Wetter für " + city + " wird abgerufen:");
+        WeatherFetcher wF = WeatherFetcher.getInstance();
 
-        String uri = "https://api.openweathermap.org/data/2.5/forecast?q=Berlin&mode=xml&appid=7e9a538ad8dcdf3337e1a98745582ee8";
+        WeatherInfo[] wI = wF.fetch(city);
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = factory.newDocumentBuilder();
-
-        Document document = docBuilder.parse(uri);
-
-        System.out.println(document.getDocumentElement().getTagName());
-
-        factory.newDocumentBuilder().parse(uri);
-
+        for (WeatherInfo info : wI) {
+            System.out.println(info.getTimestamp() + ": " + info.getTemperature());
+        }
     }
 }
